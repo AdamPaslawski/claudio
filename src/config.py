@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import os
+import re
 from pathlib import Path
 
 
@@ -16,6 +17,10 @@ def _load_dotenv(path: Path) -> None:
         if not line or line.startswith("#") or "=" not in line:
             continue
         key, _, value = line.partition("=")
+        # Strip inline comments (a # preceded by whitespace) unless quoted
+        value = value.strip()
+        if not (value.startswith('"') or value.startswith("'")):
+            value = re.split(r"\s+#", value, maxsplit=1)[0]
         key, value = key.strip(), value.strip().strip("'\"")
         os.environ.setdefault(key, value)
 
