@@ -27,7 +27,7 @@ def _load_dotenv(path: Path) -> None:
 
 # Project-local .env wins over the global user config; real env vars beat both.
 _load_dotenv(Path.cwd() / ".env")
-_load_dotenv(Path.home() / ".config" / "claude-voice" / "env")
+_load_dotenv(Path.home() / ".config" / "claudio" / "env")
 
 
 # --- Speech-to-text (faster-whisper) ---

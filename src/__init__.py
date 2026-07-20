@@ -1,1 +1,1 @@
-"""claude-voice-wrapper: a bidirectional voice interface for Claude Code."""
+"""claudio = Claude + audio — a voice interface for Claude Code."""

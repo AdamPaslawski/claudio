@@ -1,7 +1,7 @@
 [project]
-name = "claude-voice-wrapper"
+name = "claudio"
 version = "0.1.0"
-description = "Bidirectional voice interface for Claude Code: local Whisper STT in, ElevenLabs TTS out"
+description = "claudio = Claude + audio. A voice interface for Claude Code: local Whisper STT in, ElevenLabs TTS out"
 requires-python = ">=3.10"
 dependencies = [
     "claude-agent-sdk",
@@ -13,7 +13,7 @@ dependencies = [
 ]
 
 [project.scripts]
-claude-voice = "src.main:cli"
+claudio = "src.main:cli"
 
 [build-system]
 requires = ["hatchling"]

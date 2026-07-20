@@ -1,6 +1,7 @@
-# Claude Code Voice Wrapper
+# claudio
 
-Talk to Claude Code — hold a key, speak, and hear it answer while it works.
+**claudio** = Claude + audio. Talk to Claude Code — hold a key, speak, and
+hear it answer while it works.
 
 Local Whisper transcribes your speech, the Claude Agent SDK
 runs Claude Code on your existing subscription (no API-key billing), and
@@ -32,26 +33,26 @@ cp .env.example .env         # then add your ELEVEN_API_KEY
 
 ## Install globally
 
-To get `claude-voice` on your PATH and usable from **any** repo:
+To get `claudio` on your PATH and usable from **any** repo:
 
 ```bash
 uv tool install --editable .           # from this checkout
-mkdir -p ~/.config/claude-voice
-cp .env ~/.config/claude-voice/env     # global config (API key, hotkey, ...)
+mkdir -p ~/.config/claudio
+cp .env ~/.config/claudio/env          # global config (API key, hotkey, ...)
 ```
 
-Then `cd` into any project and run `claude-voice` — Claude Code operates on
+Then `cd` into any project and run `claudio` — Claude Code operates on
 whatever directory you launch from. Config resolution order: real environment
 variables, then a `.env` in the current directory (per-project overrides),
-then `~/.config/claude-voice/env`.
+then `~/.config/claudio/env`.
 
 `--editable` means edits to this checkout take effect immediately; drop the
-flag for a frozen install, and `uv tool upgrade claude-voice` after changes.
+flag for a frozen install, and `uv tool upgrade claudio` after changes.
 
 ## Run (from this checkout)
 
 ```bash
-uv run claude-voice          # or: python -m src.main
+uv run claudio               # or: python -m src.main
 ```
 
 Hold **space** (configurable via `HOTKEY`), speak, release. The terminal shows
