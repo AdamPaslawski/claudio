@@ -1,6 +1,8 @@
 # Claude Code Voice Wrapper
 
-Talk to Claude Code. Local Whisper transcribes your speech, the Claude Agent SDK
+Talk to Claude Code — hold a key, speak, and hear it answer while it works.
+
+Local Whisper transcribes your speech, the Claude Agent SDK
 runs Claude Code on your existing subscription (no API-key billing), and
 ElevenLabs streams the response back as audio — sentence by sentence, as Claude
 generates it. Push-to-talk with barge-in: press the hotkey while Claude is
