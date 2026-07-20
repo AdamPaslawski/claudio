@@ -52,6 +52,8 @@ class ClaudeSession:
         self._client: Optional[ClaudeSDKClient] = None
         # "none" means claude.ai subscription login; anything else is API billing.
         self.api_key_source: Optional[str] = None
+        # Standard Claude Code session — resumable later via `claude --resume <id>`.
+        self.session_id: Optional[str] = None
 
     async def __aenter__(self) -> "ClaudeSession":
         self._client = ClaudeSDKClient(options=self._options)
@@ -69,6 +71,10 @@ class ClaudeSession:
         await self._client.query(text)
         async for message in self._client.receive_response():
             if isinstance(message, SystemMessage) and message.subtype == "init":
+                sid = message.data.get("session_id")
+                if sid and sid != self.session_id:
+                    self.session_id = sid
+                    yield ("session", sid)
                 source = message.data.get("apiKeySource", "unknown")
                 if source != self.api_key_source:
                     self.api_key_source = source

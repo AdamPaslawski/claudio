@@ -106,6 +106,8 @@ class VoiceWrapper:
                 for sentence in sentences:
                     if await self._speak_or_barge(sentence):
                         break
+            elif kind == "session":
+                print(f"[SESSION]: {payload}  (continue in text later: claude --resume {payload})")
             elif kind == "auth":
                 print(f"[AUTH]: {payload}")
             elif kind == "tool":
@@ -134,13 +136,17 @@ class VoiceWrapper:
                 print()
                 print(f"Voice wrapper ready. Hold [{config.HOTKEY}] to speak, Ctrl+C to quit.")
                 print()
-                while True:
-                    text = await self.listen()
-                    if not text.strip():
-                        status("Heard nothing — try again.")
-                        continue
-                    print(f"[YOU]: {text}")
-                    await self.run_turn(claude, text)
+                try:
+                    while True:
+                        text = await self.listen()
+                        if not text.strip():
+                            status("Heard nothing — try again.")
+                            continue
+                        print(f"[YOU]: {text}")
+                        await self.run_turn(claude, text)
+                finally:
+                    if claude.session_id:
+                        print(f"\nContinue this conversation in text: claude --resume {claude.session_id}")
         finally:
             self.speaker.stop()
             self.recorder.stop()
