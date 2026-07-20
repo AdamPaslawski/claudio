@@ -106,6 +106,8 @@ class VoiceWrapper:
                 for sentence in sentences:
                     if await self._speak_or_barge(sentence):
                         break
+            elif kind == "auth":
+                print(f"[AUTH]: {payload}")
             elif kind == "tool":
                 print(f"[TOOL]: {payload}")
             elif kind == "result":

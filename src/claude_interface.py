@@ -16,6 +16,7 @@ from claude_agent_sdk import (
     PermissionResultAllow,
     PermissionResultDeny,
     ResultMessage,
+    SystemMessage,
     TextBlock,
     ToolUseBlock,
 )
@@ -49,6 +50,8 @@ class ClaudeSession:
 
         self._options = ClaudeAgentOptions(**options_kwargs)
         self._client: Optional[ClaudeSDKClient] = None
+        # "none" means claude.ai subscription login; anything else is API billing.
+        self.api_key_source: Optional[str] = None
 
     async def __aenter__(self) -> "ClaudeSession":
         self._client = ClaudeSDKClient(options=self._options)
@@ -65,15 +68,25 @@ class ClaudeSession:
         assert self._client is not None, "ClaudeSession must be used as an async context manager"
         await self._client.query(text)
         async for message in self._client.receive_response():
-            if isinstance(message, AssistantMessage):
+            if isinstance(message, SystemMessage) and message.subtype == "init":
+                source = message.data.get("apiKeySource", "unknown")
+                if source != self.api_key_source:
+                    self.api_key_source = source
+                    if source == "none":
+                        yield ("auth", "claude.ai subscription (no API billing)")
+                    else:
+                        yield ("auth", f"WARNING: API key from {source} — turns are billed to the API!")
+            elif isinstance(message, AssistantMessage):
                 for block in message.content:
                     if isinstance(block, TextBlock):
                         yield ("text", block.text)
                     elif isinstance(block, ToolUseBlock):
                         yield ("tool", block.name)
             elif isinstance(message, ResultMessage):
-                cost = message.total_cost_usd
                 info = f"turn done in {message.duration_ms}ms"
-                if cost:
+                cost = message.total_cost_usd
+                # Only show cost when actually billing the API; on subscription
+                # the SDK still reports a notional figure that isn't charged.
+                if cost and self.api_key_source not in (None, "none"):
                     info += f" (${cost:.4f})"
                 yield ("result", info)
