@@ -28,7 +28,25 @@ uv sync                      # or: pip install -e .
 cp .env.example .env         # then add your ELEVEN_API_KEY
 ```
 
-## Run
+## Install globally
+
+To get `claude-voice` on your PATH and usable from **any** repo:
+
+```bash
+uv tool install --editable .           # from this checkout
+mkdir -p ~/.config/claude-voice
+cp .env ~/.config/claude-voice/env     # global config (API key, hotkey, ...)
+```
+
+Then `cd` into any project and run `claude-voice` — Claude Code operates on
+whatever directory you launch from. Config resolution order: real environment
+variables, then a `.env` in the current directory (per-project overrides),
+then `~/.config/claude-voice/env`.
+
+`--editable` means edits to this checkout take effect immediately; drop the
+flag for a frozen install, and `uv tool upgrade claude-voice` after changes.
+
+## Run (from this checkout)
 
 ```bash
 uv run claude-voice          # or: python -m src.main
