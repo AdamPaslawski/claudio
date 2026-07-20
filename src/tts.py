@@ -56,7 +56,10 @@ class Speaker:
         if self._client is None:
             return "ELEVEN_API_KEY is not set — voice output disabled (text only)."
         if self._player_cmd is None:
-            return "Neither mpv nor ffplay found on PATH — voice output disabled (text only)."
+            return (
+                "Neither mpv nor ffplay found on PATH — voice output disabled (text only). "
+                "Install one with: brew install mpv  (macOS) or apt install mpv (Linux)."
+            )
         return ""
 
     async def speak(self, text: str) -> bool:

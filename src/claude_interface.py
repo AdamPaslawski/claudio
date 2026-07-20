@@ -34,7 +34,9 @@ class ClaudeSession:
     """
 
     def __init__(self, on_permission: Optional[PermissionCallback] = None):
-        options_kwargs: dict[str, Any] = {}
+        # Force subscription auth: an exported ANTHROPIC_API_KEY would take
+        # precedence over the claude.ai login and bill the API instead.
+        options_kwargs: dict[str, Any] = {"env": {"ANTHROPIC_API_KEY": ""}}
         if on_permission is not None:
 
             async def can_use_tool(tool_name: str, tool_input: dict[str, Any], context: Any):
